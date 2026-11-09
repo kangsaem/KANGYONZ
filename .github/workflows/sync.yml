@@ -35,6 +35,7 @@ jobs:
           echo kangyonz.com > me/CNAME
           echo 'google.com, pub-7103292552862249, DIRECT, f08c47fec0942fa0' > me/ads.txt   # 애드센스 ads.txt(본 주소 루트)
           echo "$SHA" > me/.sync-sha
+          echo "사이트 확인: $(curl -fsS -m 15 https://kangyonz.com/.sync-sha 2>/dev/null || echo 없음) / ads.txt: $(curl -fsS -m 15 https://kangyonz.com/ads.txt 2>/dev/null || echo 없음)"
           python3 - <<'PY'
           import glob, re
           for p in glob.glob('me/*.html'):
