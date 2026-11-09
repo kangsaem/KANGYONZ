@@ -1,0 +1,54 @@
+# kangyonz.com 본 주소 = DTMD(다이빙 앱). moneypiee의 scuba.html·dtmd 파일만 복사해 배포. 10분마다. 광고 없음(본 주소는 광고 안 함).
+name: sync-dtmd-from-moneypiee
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: me
+      - uses: actions/checkout@v4
+        with:
+          repository: kangsaem/moneypiee
+          path: src
+      - name: 복사
+        run: |
+          SHA=$(git -C src rev-parse HEAD)
+          find me -mindepth 1 -maxdepth 1 ! -name .git ! -name .github -exec rm -rf {} +
+          cd src
+          cp -r scuba.html dtmd* scuba-bg.* scuba-splash.mp4 sample-*.jpg tut .nojekyll ../me/ 2>/dev/null || true
+          cd ..
+          cp me/scuba.html me/index.html
+          echo kangyonz.com > me/CNAME
+          echo 'google.com, pub-7103292552862249, DIRECT, f08c47fec0942fa0' > me/ads.txt   # 애드센스 ads.txt(본 주소 루트)
+          echo "$SHA" > me/.sync-sha
+          python3 - <<'PY'
+          import glob, re
+          for p in glob.glob('me/*.html'):
+              s = open(p, encoding='utf-8', errors='surrogateescape').read()
+              t = re.sub(r'<script[^>]*adsbygoogle\.js[^>]*>\s*</script>', '', s)
+              t = re.sub(r'<ins class="kakao_ad_area".*?</ins>\s*<script[^>]*ba\.min\.js[^>]*>\s*</script>', '', t, flags=re.S)
+              if t != s: open(p, 'w', encoding='utf-8', errors='surrogateescape').write(t)
+          PY
+          cd me
+          git config user.name 'sync-bot'; git config user.email 'sync-bot@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then echo "변경 없음 $SHA"; else git commit -qm "sync DTMD from moneypiee $SHA" && git push -q; fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: me
+      - uses: actions/deploy-pages@v4
