@@ -1,4 +1,5 @@
 # kangyonz.com 본 주소 = DTMD(다이빙 앱). moneypiee의 scuba.html·dtmd 파일만 복사해 배포. 10분마다. 광고 없음(본 주소는 광고 안 함).
+# proto/ = 개편 시안 폴더. sync가 지우지 않음(kangyonz.com/proto/). 버전별 v1, v2… 보존.
 name: sync-dtmd-from-moneypiee
 on:
   schedule:
@@ -27,7 +28,7 @@ jobs:
       - name: 복사
         run: |
           SHA=$(git -C src rev-parse HEAD)
-          find me -mindepth 1 -maxdepth 1 ! -name .git ! -name .github -exec rm -rf {} +
+          find me -mindepth 1 -maxdepth 1 ! -name .git ! -name .github ! -name proto -exec rm -rf {} +
           cd src
           cp -r scuba.html dtmd* scuba-bg.* scuba-splash.mp4 sample-*.jpg tut .nojekyll ../me/ 2>/dev/null || true
           cd ..
