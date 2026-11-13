@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f4f2ee">
+<title>[PROTO v2] KANGYONZ</title>
+<link rel="preload" as="image" href="v2/s1.webp" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f2ee;      /* 미색 바탕 */
+  --ink:#2a2826;     /* 먹색 글자 */
+  --mute:#8a857e;    /* 보조 글자 */
+  --line:#e0dbd3;    /* 구분선 */
+  --deep:#1f2f3d;    /* 짙은 남색 (강조 1색) */
+  --serif:"Noto Serif KR","Apple SD Gothic Neo",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
+  --slow:cubic-bezier(.25,.1,.25,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.7}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+/* ── 상단 바: 처음엔 로고만, 스크롤하면 미색 바 + 메뉴 ── */
+.bar{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  padding:calc(18px + env(safe-area-inset-top)) 28px 18px;color:#fff;transition:background .8s var(--slow),color .8s var(--slow),padding .8s var(--slow)}
+.bar .logo{font-family:var(--serif);font-size:15px;letter-spacing:.32em;font-weight:600}
+.bar nav{display:flex;gap:28px;font-size:13px;letter-spacing:.12em;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .8s var(--slow),transform .8s var(--slow)}
+.bar.on{background:rgba(244,242,238,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--ink);padding-top:calc(12px + env(safe-area-inset-top));padding-bottom:12px;border-bottom:1px solid var(--line)}
+.bar.on nav{opacity:1;transform:none;pointer-events:auto}
+.bar nav a{position:relative;padding:4px 0}
+.bar nav a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--slow)}
+.bar nav a:hover::after{transform:scaleX(1)}
+
+/* ── 첫 화면: 전체 화면 사진, 천천히 확대 + 크로스페이드 ── */
+.hero{position:relative;height:100vh;height:100svh;overflow:hidden;background:#33444f}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 2.8s var(--slow)}
+.slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.02)}
+.slide.on{opacity:1}
+.slide.on img{animation:kb 14s linear forwards}
+.slide:nth-child(even).on img{animation-name:kb2}
+@keyframes kb {from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.12) translate(-1.5%,-1%)}}
+@keyframes kb2{from{transform:scale(1.12) translate(1%,0)}to{transform:scale(1.03) translate(0,1%)}}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,28,34,.28) 0%,rgba(20,28,34,0) 30%,rgba(20,28,34,0) 55%,rgba(20,28,34,.45) 100%);pointer-events:none}
+.hero .copy{position:absolute;left:28px;right:28px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:2;color:#fff}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(26px,4.4vw,48px);line-height:1.45;letter-spacing:.04em}
+.hero p{margin-top:12px;font-size:13px;letter-spacing:.18em;opacity:.85}
+.hero .dots{position:absolute;left:28px;bottom:calc(36px + env(safe-area-inset-bottom));z-index:2;display:flex;gap:8px}
+.hero .dots i{display:block;width:28px;height:1px;background:rgba(255,255,255,.35);overflow:hidden;position:relative}
+.hero .dots i.on::after{content:'';position:absolute;inset:0;background:#fff;transform-origin:left;animation:bar 8s linear forwards}
+@keyframes bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero .scroll{position:absolute;right:28px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:2;color:#fff;font-size:11px;letter-spacing:.3em;writing-mode:vertical-rl;display:flex;align-items:center;gap:12px;opacity:.85}
+.hero .scroll::after{content:'';width:1px;height:48px;background:linear-gradient(#fff,transparent);animation:drip 2.6s var(--slow) infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ── 본문 공통 ── */
+section.blk{max-width:1040px;margin:0 auto;padding:120px 28px}
+.eyebrow{font-size:11px;letter-spacing:.32em;color:var(--mute);margin-bottom:20px}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,30px);letter-spacing:.04em;margin-bottom:40px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 1.4s var(--slow),transform 1.4s var(--slow)}
+.reveal.in{opacity:1;transform:none}
+
+/* 소개 */
+.intro{text-align:center}
+.intro .lead{font-family:var(--serif);font-size:clamp(17px,2.2vw,22px);line-height:2.1;letter-spacing:.03em}
+.intro .lead span{display:block}
+
+/* 앱: 종류별 */
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin-bottom:8px;overflow-x:auto}
+.tabs button{background:none;border:0;font:inherit;font-size:13px;letter-spacing:.12em;color:var(--mute);padding:12px 0;cursor:pointer;border-bottom:1px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .4s}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
+.apps{list-style:none}
+.app{display:grid;grid-template-columns:64px 1fr auto;gap:20px;align-items:center;padding:28px 0;border-bottom:1px solid var(--line)}
+.app[hidden]{display:none}
+.app .ic{width:64px;height:64px;border-radius:15px;background:var(--deep);color:#e9e4da;display:grid;place-items:center;font-family:var(--serif);font-size:20px;overflow:hidden}
+.app .ic img{width:100%;height:100%;object-fit:cover}
+.app .nm{font-family:var(--serif);font-size:18px}
+.app .ds{font-size:13px;color:var(--mute);margin-top:2px}
+.app .cat{font-size:11px;letter-spacing:.2em;color:var(--mute)}
+.app .dl{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.06em;padding:9px 16px;border:1px solid var(--ink);border-radius:999px;transition:background .4s,color .4s}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.ghost{border-color:var(--line);color:var(--mute);pointer-events:none}
+
+/* 서브페이지 */
+.pages{list-style:none;border-top:1px solid var(--line)}
+.pages a{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:26px 0;border-bottom:1px solid var(--line);transition:padding .5s var(--slow)}
+.pages a:hover{padding-left:10px}
+.pages .t{font-family:var(--serif);font-size:19px}
+.pages .s{font-size:13px;color:var(--mute);flex:1;margin-left:20px}
+.pages .ar{font-size:14px;color:var(--mute);transition:transform .5s var(--slow)}
+.pages a:hover .ar{transform:translateX(6px)}
+
+/* 푸터 */
+footer{background:var(--deep);color:#cfc9bf;padding:80px 28px calc(48px + env(safe-area-inset-bottom))}
+footer .in{max-width:1040px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+footer .logo{font-family:var(--serif);letter-spacing:.32em;font-size:15px;color:#fff}
+footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
+
+/* 모바일 */
+@media (max-width:640px){
+  .bar{padding-left:20px;padding-right:20px}
+  .bar nav{gap:16px;font-size:12px}
+  .hero .copy,.hero .dots{left:20px}
+  section.blk{padding:88px 20px}
+  .app{grid-template-columns:52px 1fr;gap:14px}
+  .app .ic{width:52px;height:52px;border-radius:12px}
+  .app .dl{grid-column:1/-1;justify-content:flex-start}
+  .pages .s{display:none}
+}
+/* 움직임 줄이기 설정 존중 */
+@media (prefers-reduced-motion:reduce){
+  .slide.on img,.hero .dots i.on::after,.hero .scroll::after{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="bar" id="bar">
+  <a class="logo" href="#top">KANGYONZ</a>
+  <nav>
+    <a href="#apps">앱</a>
+    <a href="#pages">페이지</a>
+    <a href="#contact">연락</a>
+  </nav>
+</header>
+
+<!-- 첫 화면 -->
+<div class="hero" id="top">
+  <div class="slide on"><img src="v2/s1.webp" alt=""></div>
+  <div class="slide"><img data-src="v2/g1.webp" alt=""></div>
+  <div class="slide"><img data-src="v2/s9.webp" alt=""></div>
+  <div class="slide"><img data-src="v2/g2.webp" alt=""></div>
+  <div class="slide"><img data-src="v2/s16.webp" alt=""></div>
+  <div class="copy">
+    <h1>천천히, 깊게.<br>필요한 만큼만 만듭니다.</h1>
+    <p>KANGYONZ · 작은 도구들</p>
+  </div>
+  <div class="dots" id="dots"></div>
+  <div class="scroll">SCROLL</div>
+</div>
+
+<!-- 소개 -->
+<section class="blk intro">
+  <p class="eyebrow reveal">ABOUT</p>
+  <p class="lead reveal">
+    <span>바다에서 쓰는 계산기부터</span>
+    <span>숫자를 읽는 리포트까지.</span>
+    <span>혼자 쓰다 필요해서 만든 것들을 모아 둡니다.</span>
+  </p>
+</section>
+
+<!-- 앱 -->
+<section class="blk" id="apps">
+  <p class="eyebrow reveal">APPS</p>
+  <h2 class="reveal">앱</h2>
+  <div class="tabs reveal" id="tabs">
+    <button class="on" data-c="all">전체</button>
+    <button data-c="dive">다이빙</button>
+    <button data-c="money">금융</button>
+    <button data-c="etc">기타</button>
+  </div>
+  <ul class="apps">
+    <li class="app reveal" data-c="dive">
+      <div class="ic"><img src="/dtmd-icon-192.png" alt="" loading="lazy"></div>
+      <div><p class="cat">DIVING</p><p class="nm">DTMD 다이빙 플래너</p><p class="ds">무감압·감압 계획, 로그, 튜토리얼 · 9개 언어</p></div>
+      <div class="dl"><a class="btn" href="/dtmd.html">웹에서 열기</a><span class="btn ghost">iOS 준비 중</span><span class="btn ghost">Android 준비 중</span></div>
+    </li>
+    <li class="app reveal" data-c="money">
+      <div class="ic">M</div>
+      <div><p class="cat">FINANCE</p><p class="nm">머니파이</p><p class="ds">(설명 입력 예정)</p></div>
+      <div class="dl"><a class="btn" href="https://www.moneypie.kr">웹에서 열기</a></div>
+    </li>
+    <li class="app reveal" data-c="money">
+      <div class="ic">V1</div>
+      <div><p class="cat">FINANCE</p><p class="nm">V1 리포트</p><p class="ds">(설명 입력 예정)</p></div>
+      <div class="dl"><span class="btn ghost">링크 입력 예정</span></div>
+    </li>
+    <li class="app reveal" data-c="etc">
+      <div class="ic">·</div>
+      <div><p class="cat">ETC</p><p class="nm">(앱 이름)</p><p class="ds">(자리만 잡아 둔 항목)</p></div>
+      <div class="dl"><span class="btn ghost">준비 중</span></div>
+    </li>
+  </ul>
+</section>
+
+<!-- 서브페이지 -->
+<section class="blk" id="pages">
+  <p class="eyebrow reveal">PAGES</p>
+  <h2 class="reveal">페이지</h2>
+  <ul class="pages reveal">
+    <li><a href="#"><span class="t">(서브페이지 1)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
+    <li><a href="#"><span class="t">(서브페이지 2)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
+    <li><a href="#"><span class="t">(서브페이지 3)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
+  </ul>
+</section>
+
+<footer id="contact">
+  <div class="in">
+    <div>
+      <p class="logo">KANGYONZ</p>
+      <p style="margin-top:14px;font-size:13px"><a href="mailto:kangsaem@gmail.com">kangsaem@gmail.com</a></p>
+    </div>
+    <small>© 2026 KANGYONZ · PROTO v2</small>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // 슬라이드: 8초마다 크로스페이드. 첫 장만 먼저, 나머지는 페이지 로드 후 받기
+  var slides=[].slice.call(document.querySelectorAll('.slide')),dots=document.getElementById('dots'),i=0,N=slides.length,T=8000;
+  slides.forEach(function(_,k){var d=document.createElement('i');if(!k)d.className='on';dots.appendChild(d)});
+  var ds=[].slice.call(dots.children);
+  window.addEventListener('load',function(){slides.forEach(function(s){var im=s.querySelector('img[data-src]');if(im){im.src=im.dataset.src;im.removeAttribute('data-src')}})});
+  var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function go(){
+    var n=(i+1)%N,im=slides[n].querySelector('img');
+    if(im.dataset.src||!im.complete){setTimeout(go,1000);return}   // 아직 안 받았으면 기다림
+    slides[i].classList.remove('on');ds[i].className='';
+    void ds[n].offsetWidth;
+    slides[n].classList.add('on');ds[n].className='on';i=n;
+    setTimeout(go,T);
+  }
+  if(!still)setTimeout(go,T);
+  // 탭이 숨겨지면 멈췄다가 다시 시작해 슬라이드가 몰려 넘어가지 않게
+  // (setTimeout은 백그라운드에서 느려지므로 별도 처리 불필요)
+
+  // 상단 바: 첫 화면을 30% 정도 내리면 메뉴 표시
+  var bar=document.getElementById('bar'),hero=document.getElementById('top');
+  new IntersectionObserver(function(e){bar.classList.toggle('on',!e[0].isIntersecting)},{rootMargin:'-70% 0px 0px 0px'}).observe(hero);
+
+  // 스크롤하면 서서히 나타남
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+
+  // 앱 종류 탭
+  var tabs=document.getElementById('tabs');
+  tabs.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    [].forEach.call(tabs.children,function(x){x.classList.toggle('on',x===b)});
+    var c=b.dataset.c;
+    document.querySelectorAll('.app').forEach(function(a){a.hidden=!(c==='all'||a.dataset.c===c)});
+  });
+})();
+</script>
+</body>
+</html>
