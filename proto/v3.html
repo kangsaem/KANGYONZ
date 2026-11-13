@@ -25,6 +25,7 @@
 html{background:var(--bg);scroll-behavior:smooth;scroll-snap-type:y mandatory}
 /* 화면 단위로 자석처럼 붙음 */
 .panel{scroll-snap-align:start;position:relative}
+.win.panel{scroll-snap-align:none}   /* 물고기떼 장면은 멈추지 않고 지나감 */
 /* 고정 장면: 부모를 잘라(clip) 두고 안쪽 그림은 화면에 고정 → 위 레이어가 올라가면 뒤에 멈춘 그림이 드러남 (iOS에서도 동작하는 방식) */
 .win{height:100vh;height:100svh;clip-path:inset(0);overflow:hidden;background:#33444f}
 .win .fix{position:fixed;inset:0;height:100vh;height:100lvh}
@@ -275,7 +276,7 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
   });
 
   // ── 방향키 한 번 = 한 화면 ──
-  var stops=[].slice.call(document.querySelectorAll('.panel, footer')),busy=false;
+  var stops=[].slice.call(document.querySelectorAll('.panel:not(.win), footer')),busy=false;
   function topOf(el){return el.getBoundingClientRect().top+scrollY}
   addEventListener('keydown',function(e){
     if(e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName))return;
