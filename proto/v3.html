@@ -91,7 +91,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,30px);lette
 .tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin-bottom:8px;overflow-x:auto}
 .tabs button{background:none;border:0;font:inherit;font-size:13px;letter-spacing:.12em;color:var(--mute);padding:12px 0;cursor:pointer;border-bottom:1px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .4s}
 .tabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
-.apps{list-style:none}
+.apps{list-style:none;border-top:1px solid var(--line)}
 .app{border-bottom:1px solid var(--line)}
 .app .row{display:grid;grid-template-columns:64px 1fr auto;gap:20px;align-items:center;padding:28px 0;transition:padding .5s var(--slow)}
 .app a.row:hover{padding-left:10px}
@@ -163,12 +163,7 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
   <div class="slide"><img data-src="v3/g3.webp" alt=""></div>
   <div class="slide"><img data-src="v3/g4.webp" alt=""></div>
   </div>
-  <div class="copy" data-speed="0.5" data-fade>
-    <h1>천천히, 깊게.<br>필요한 만큼만 만듭니다.</h1>
-    <p>KANGYONZ · 작은 도구들</p>
-  </div>
   <div class="dots" id="dots" data-speed="0.5" data-fade></div>
-  <div class="scroll" data-speed="0.5" data-fade>SCROLL</div>
 </div>
 
 <!-- 소개 -->
@@ -187,12 +182,6 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
 <section class="blk panel sheet" id="apps"><div class="w">
   <p class="eyebrow reveal" data-depth="0.45">APPS</p>
   <h2 class="reveal" data-depth="0.28">앱</h2>
-  <div class="tabs reveal" id="tabs" data-depth="0.12">
-    <button class="on" data-c="all">전체</button>
-    <button data-c="dive">다이빙</button>
-    <button data-c="money">금융</button>
-    <button data-c="etc">기타</button>
-  </div>
   <ul class="apps">
     <li class="app reveal" data-c="dive"><a class="row" href="/dtmd.html">
       <div class="ic"><img src="/dtmd-icon-192.png" alt="" loading="lazy"></div>
@@ -216,7 +205,6 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
 <!-- 서브페이지 -->
  <section class="blk panel sheet" id="pages"><div class="w">
   <p class="eyebrow reveal" data-depth="0.45">PAGES</p>
-  <h2 class="reveal" data-depth="0.28">페이지</h2>
   <ul class="pages reveal">
     <li><a href="#"><span class="t">(서브페이지 1)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
     <li><a href="#"><span class="t">(서브페이지 2)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
@@ -228,7 +216,7 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
   <div class="in">
     <div>
       <p class="logo">KANGYONZ</p>
-      <p style="margin-top:14px;font-size:13px"><a href="mailto:kangsaem@gmail.com">kangsaem@gmail.com</a></p>
+      <p style="margin-top:14px;font-size:13px"><a href="mailto:kangyonz@gmail.com">kangyonz@gmail.com</a></p>
     </div>
     <small>© 2026 KANGYONZ · PROTO v3</small>
   </div>
@@ -289,15 +277,6 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
   // 스크롤하면 서서히 나타남
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
-
-  // 앱 종류 탭
-  var tabs=document.getElementById('tabs');
-  tabs.addEventListener('click',function(e){
-    var b=e.target.closest('button');if(!b)return;
-    [].forEach.call(tabs.children,function(x){x.classList.toggle('on',x===b)});
-    var c=b.dataset.c;
-    document.querySelectorAll('.app').forEach(function(a){a.hidden=!(c==='all'||a.dataset.c===c)});
-  });
 })();
 </script>
 </body>
