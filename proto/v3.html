@@ -25,7 +25,10 @@
 html{background:var(--bg);scroll-behavior:smooth;scroll-snap-type:y mandatory}
 /* 화면 단위로 자석처럼 붙음 */
 .panel{scroll-snap-align:start;position:relative}
-.win.panel{scroll-snap-align:none}   /* 물고기떼 장면은 멈추지 않고 지나감 */
+.win.panel{scroll-snap-align:none}
+/* 마지막 화면: 페이지 목록 + 연락처를 한 화면에 */
+.endp{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;z-index:1;background:var(--bg)}
+.endp #pages{flex:1;min-height:0}   /* 물고기떼 장면은 멈추지 않고 지나감 */
 /* 고정 장면: 부모를 잘라(clip) 두고 안쪽 그림은 화면에 고정 → 위 레이어가 올라가면 뒤에 멈춘 그림이 드러남 (iOS에서도 동작하는 방식) */
 .win{height:100vh;height:100svh;clip-path:inset(0);overflow:hidden;background:#33444f}
 .win .fix{position:fixed;inset:0;height:100vh;height:100lvh}
@@ -118,7 +121,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,30px);lette
 .pages a:hover .ar{transform:translateX(6px)}
 
 /* 푸터 */
-footer{scroll-snap-align:end;position:relative;z-index:1;background:var(--deep);color:#cfc9bf;padding:80px 28px calc(48px + env(safe-area-inset-bottom))}
+footer{position:relative;z-index:1;background:var(--deep);color:#cfc9bf;padding:80px 28px calc(48px + env(safe-area-inset-bottom))}
 footer .in{max-width:1040px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
 footer .logo{font-family:var(--serif);letter-spacing:.32em;font-size:15px;color:#fff}
 footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
@@ -195,7 +198,8 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
 </div></section>
 
 <!-- 서브페이지 -->
- <section class="blk panel sheet" id="pages"><div class="w">
+ <div class="panel endp">
+<section class="blk sheet" id="pages"><div class="w">
   <p class="eyebrow reveal" data-depth="0.45">PAGES</p>
   <ul class="pages reveal">
     <li><a href="#"><span class="t">(서브페이지 1)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
@@ -213,6 +217,7 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
     <small>© 2026 KANGYONZ · PROTO v3</small>
   </div>
 </footer>
+</div>
 
 <script>
 (function(){
@@ -276,7 +281,7 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
   });
 
   // ── 방향키 한 번 = 한 화면 ──
-  var stops=[].slice.call(document.querySelectorAll('.panel:not(.win), footer')),busy=false;
+  var stops=[].slice.call(document.querySelectorAll('.panel:not(.win)')),busy=false;
   function topOf(el){return el.getBoundingClientRect().top+scrollY}
   addEventListener('keydown',function(e){
     if(e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName))return;
