@@ -35,7 +35,7 @@ html{background:var(--bg);scroll-behavior:smooth;scroll-snap-type:y mandatory}
 .win .cap h3{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.6vw,40px);letter-spacing:.08em}
 .win::after{content:'';position:absolute;inset:0;background:rgba(20,28,34,.18);pointer-events:none}
 /* 내용 레이어: 미색 판이 고정 장면 위로 올라감 */
-.sheet{background:var(--bg);z-index:1;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center}
+.sheet{background:var(--bg);z-index:1;overflow:hidden;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center}
 
 body{font-family:var(--sans);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.7}
 a{color:inherit;text-decoration:none}
@@ -124,7 +124,7 @@ footer .logo{font-family:var(--serif);letter-spacing:.32em;font-size:15px;color:
 footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
 
 /* 패럴랙스: transform과 겹치지 않게 translate 속성 사용 */
-[data-speed]{will-change:translate}
+[data-speed],[data-depth]{will-change:translate}
 /* 모바일 */
 @media (max-width:640px){
   .bar{padding-left:20px;padding-right:20px}
@@ -158,36 +158,36 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
 
 <!-- 첫 화면 -->
 <div class="hero panel" id="top">
-  <div class="fix" data-speed="0.5">
+  <div class="fix" data-speed="0.3">
   <div class="slide on"><img src="v3/g1.webp" alt=""></div>
   <div class="slide"><img data-src="v3/g3.webp" alt=""></div>
   <div class="slide"><img data-src="v3/g4.webp" alt=""></div>
   </div>
-  <div class="copy" data-speed="0.72" data-fade>
+  <div class="copy" data-speed="0.5" data-fade>
     <h1>천천히, 깊게.<br>필요한 만큼만 만듭니다.</h1>
     <p>KANGYONZ · 작은 도구들</p>
   </div>
-  <div class="dots" id="dots" data-speed="0.72" data-fade></div>
-  <div class="scroll" data-speed="0.72" data-fade>SCROLL</div>
+  <div class="dots" id="dots" data-speed="0.5" data-fade></div>
+  <div class="scroll" data-speed="0.5" data-fade>SCROLL</div>
 </div>
 
 <!-- 소개 -->
 <section class="blk intro panel sheet"><div class="w">
-  <p class="eyebrow reveal" data-speed="0.86">ABOUT</p>
-  <p class="lead reveal" data-speed="0.9">
-    <span>바다에서 쓰는 계산기부터</span>
-    <span>숫자를 읽는 리포트까지.</span>
-    <span>필요해서 만든 것들을 모아 둡니다.</span>
+  <p class="eyebrow reveal" data-depth="0.45">ABOUT</p>
+  <p class="lead reveal">
+    <span data-depth="0.4">바다에서 쓰는 계산기부터</span>
+    <span data-depth="0.22">숫자를 읽는 리포트까지.</span>
+    <span data-depth="0.06">필요해서 만든 것들을 모아 둡니다.</span>
   </p>
 </div></section>
 
 <!-- 앱 -->
-<div class="win panel"><div class="fix"><img data-src="v3/g2.webp" alt=""></div><div class="cap" data-speed="0.82"><div><p>APPS</p><h3>만든 것들</h3></div></div></div>
+<div class="win panel"><div class="fix"><img data-src="v3/g2.webp" alt=""></div><div class="cap" data-speed="0.5"><div><p>APPS</p><h3>만든 것들</h3></div></div></div>
 
 <section class="blk panel sheet" id="apps"><div class="w">
-  <p class="eyebrow reveal" data-speed="0.86">APPS</p>
-  <h2 class="reveal" data-speed="0.93">앱</h2>
-  <div class="tabs reveal" id="tabs">
+  <p class="eyebrow reveal" data-depth="0.45">APPS</p>
+  <h2 class="reveal" data-depth="0.28">앱</h2>
+  <div class="tabs reveal" id="tabs" data-depth="0.12">
     <button class="on" data-c="all">전체</button>
     <button data-c="dive">다이빙</button>
     <button data-c="money">금융</button>
@@ -215,8 +215,8 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
 
 <!-- 서브페이지 -->
  <section class="blk panel sheet" id="pages"><div class="w">
-  <p class="eyebrow reveal" data-speed="0.86">PAGES</p>
-  <h2 class="reveal" data-speed="0.93">페이지</h2>
+  <p class="eyebrow reveal" data-depth="0.45">PAGES</p>
+  <h2 class="reveal" data-depth="0.28">페이지</h2>
   <ul class="pages reveal">
     <li><a href="#"><span class="t">(서브페이지 1)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
     <li><a href="#"><span class="t">(서브페이지 2)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
@@ -261,18 +261,19 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
   new IntersectionObserver(function(e){bar.classList.toggle('on',!e[0].isIntersecting)},{rootMargin:'-70% 0px 0px 0px'}).observe(hero);
 
   // ── 레이어 속도 차이 (패럴랙스) ──
-  var px=[].slice.call(document.querySelectorAll('[data-speed]')),ticking=false;
+  // data-speed: 1보다 작으면 느리게 따라옴(배경·첫 화면). data-depth: 가운데서 멀수록 위로 벌어짐(제목류, 본문과 겹치지 않음)
+  var px=[].slice.call(document.querySelectorAll('[data-speed],[data-depth]')),ticking=false;
   function para(){
     ticking=false;
-    var vh=innerHeight,k=innerWidth<640?0.6:1;   // 폰에서는 움직임 폭을 줄임
+    var vh=innerHeight,k=innerWidth<640?0.85:1;
     px.forEach(function(el){
       var box=(el.closest('.panel')||el.parentElement).getBoundingClientRect();
-      if(box.bottom<-vh||box.top>vh*2)return;    // 화면 근처만 계산
-      var c=box.top+box.height/2-vh/2;
-      var d=-c*(1-parseFloat(el.dataset.speed))*k;
-      if(!el.classList.contains('fix'))d=Math.max(-90,Math.min(90,d));
+      if(box.bottom<-vh||box.top>vh*2)return;
+      var c=box.top+box.height/2-vh/2,d;
+      if(el.dataset.depth){d=-Math.min(Math.abs(c),vh)*parseFloat(el.dataset.depth)*k;d=Math.max(d,-180)}
+      else{d=-c*(1-parseFloat(el.dataset.speed))*k;if(!el.classList.contains('fix'))d=Math.max(-200,Math.min(200,d))}
       el.style.translate='0 '+d.toFixed(1)+'px';
-      if(el.hasAttribute('data-fade'))el.style.opacity=Math.max(0,1-Math.max(0,-box.top)/(vh*0.6)).toFixed(3);
+      if(el.hasAttribute('data-fade'))el.style.opacity=Math.max(0,1-Math.max(0,-box.top)/(vh*0.55)).toFixed(3);
     });
   }
   if(!still){
