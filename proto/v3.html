@@ -22,7 +22,9 @@
   --slow:cubic-bezier(.25,.1,.25,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--bg);scroll-behavior:smooth;scroll-snap-type:y mandatory}
+html{background:var(--bg);scroll-behavior:smooth}
+/* 자석 스냅은 터치 기기(폰·태블릿)에서만. 마우스 휠에는 적용 안 함 */
+@media (hover:none) and (pointer:coarse){html{scroll-snap-type:y mandatory}}
 /* 화면 단위로 자석처럼 붙음 */
 .panel{scroll-snap-align:start;position:relative}
 .win.panel{scroll-snap-align:none}
