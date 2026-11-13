@@ -126,6 +126,10 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,30px);lette
 footer{position:relative;z-index:1;background:var(--deep);color:#cfc9bf;padding:80px 28px calc(48px + env(safe-area-inset-bottom))}
 footer .in{max-width:1040px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
 footer .logo{font-family:var(--serif);letter-spacing:.32em;font-size:15px;color:#fff}
+footer .fr{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+footer .top{font-size:11px;letter-spacing:.3em;color:#fff;opacity:.8;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.35);transition:opacity .4s}
+footer .top:hover{opacity:1}
+@media (max-width:640px){footer .fr{align-items:flex-start}}
 footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
 
 /* 패럴랙스: transform과 겹치지 않게 translate 속성 사용 */
@@ -218,7 +222,7 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
       <p class="logo">KANGYONZ</p>
       <p style="margin-top:14px;font-size:13px"><a href="mailto:kangyonz@gmail.com">kangyonz@gmail.com</a></p>
     </div>
-    <small>© 2026 KANGYONZ · PROTO v3</small>
+    <div class="fr"><a class="top" href="#top" id="toTop">TOP ↑</a><small>© 2026 KANGYONZ · PROTO v3</small></div>
   </div>
 </footer>
 </div>
@@ -308,6 +312,9 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
     scrollTo({top:t,behavior:still?'auto':'smooth'});
     setTimeout(function(){busy=false},still?50:650);
   });
+
+  // 맨 위로
+  document.getElementById('toTop').addEventListener('click',function(e){e.preventDefault();scrollTo({top:0,behavior:still?'auto':'smooth'})});
 
   // 스크롤하면 서서히 나타남
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
