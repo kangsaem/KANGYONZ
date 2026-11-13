@@ -265,6 +265,15 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
     p.querySelectorAll('.reveal').forEach(function(el,n){el.style.transitionDelay=Math.min(n*0.15,0.9)+'s'});
   });
 
+  // ── 숨은 입력: 첫 화면에서 ART 또는 IZO 입력 → kangizo.com ──
+  var typed='';
+  addEventListener('keydown',function(e){
+    if(e.altKey||e.ctrlKey||e.metaKey||e.key.length!==1)return;
+    if(scrollY>innerHeight*0.5){typed='';return}          // 첫 화면에서만
+    typed=(typed+e.key.toUpperCase()).slice(-3);
+    if(typed==='ART'||typed==='IZO')location.href='https://kangizo.com';
+  });
+
   // ── 방향키 한 번 = 한 화면 ──
   var stops=[].slice.call(document.querySelectorAll('.panel, footer')),busy=false;
   function topOf(el){return el.getBoundingClientRect().top+scrollY}
