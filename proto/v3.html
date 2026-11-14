@@ -34,6 +34,7 @@ html{background:var(--bg);scroll-behavior:smooth}
 /* 고정 장면: 부모를 잘라(clip) 두고 안쪽 그림은 화면에 고정 → 위 레이어가 올라가면 뒤에 멈춘 그림이 드러남 (iOS에서도 동작하는 방식) */
 .win{height:100vh;height:100svh;clip-path:inset(0);overflow:hidden;background:#33444f}
 .win .fix{position:fixed;inset:0;height:100vh;height:100lvh}
+.win .fix video{width:100%;height:100%;object-fit:cover;display:block}
 .win .fix img{width:100%;height:100%;object-fit:cover}
 .win .cap{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#fff;z-index:2}
 .win .cap p{font-size:11px;letter-spacing:.4em;opacity:.85;margin-bottom:14px}
@@ -210,7 +211,7 @@ body.at-top .dropzone{display:block}
 </div></section>
 
 <!-- 앱 -->
-<div class="win panel"><div class="fix"><img data-src="v3/fish.webp" alt=""></div><div class="cap" data-speed="1.35"><div><p>APPS</p><h3>만든 것들</h3></div></div></div>
+<div class="win panel"><div class="fix"><video class="bgv" data-src="v3/fish.mp4" poster="v3/fish-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></div><div class="cap" data-speed="1.35"><div><p>APPS</p><h3>만든 것들</h3></div></div></div>
 
 <section class="blk panel sheet" id="apps"><div class="w" data-speed="1.35">
   <p class="eyebrow reveal">APPS</p>
@@ -257,8 +258,12 @@ body.at-top .dropzone{display:block}
   var slides=[].slice.call(document.querySelectorAll('.slide')),dots=document.getElementById('dots'),i=0,N=slides.length,T=8000;
   slides.forEach(function(_,k){var d=document.createElement('i');if(!k)d.className='on';dots.appendChild(d)});
   var ds=[].slice.call(dots.children);
-  window.addEventListener('load',function(){document.querySelectorAll('img[data-src]').forEach(function(im){im.src=im.dataset.src;im.removeAttribute('data-src')})});
-  var wo=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('in',e.isIntersecting)})},{threshold:.35});
+  window.addEventListener('load',function(){document.querySelectorAll('img[data-src],video[data-src]').forEach(function(im){im.src=im.dataset.src;im.removeAttribute('data-src')})});
+  var wo=new IntersectionObserver(function(es){es.forEach(function(e){
+    e.target.classList.toggle('in',e.isIntersecting);
+    var v=e.target.querySelector('video');                 // 영상은 보일 때만 재생
+    if(v&&!still){if(e.isIntersecting){var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}else v.pause()}
+  })},{threshold:0});
   document.querySelectorAll('.win').forEach(function(w){wo.observe(w)});
   var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function go(){
